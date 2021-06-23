@@ -1,7 +1,6 @@
 namespace ToDoList.Data.Model{
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-     
+    using System.ComponentModel.DataAnnotations;     
     public class ToDoList : IEntity
     {
         [Key]

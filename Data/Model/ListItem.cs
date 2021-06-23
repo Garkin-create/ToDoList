@@ -1,5 +1,4 @@
-namespace ToDoList.Data.Model{
-    using System.Collections.Generic;
+namespace ToDoList.Data.Model{    
     using System.ComponentModel.DataAnnotations;
     public class ListItem : IEntity
     {
