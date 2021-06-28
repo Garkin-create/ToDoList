@@ -2,12 +2,12 @@
 
 namespace ToDoList.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "ToDoListIds",
+                name: "ToDoLists",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
@@ -16,7 +16,7 @@ namespace ToDoList.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ToDoListIds", x => x.Id);
+                    table.PrimaryKey("PK_ToDoLists", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -27,15 +27,15 @@ namespace ToDoList.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", nullable: true),
                     IsComplete = table.Column<bool>(type: "INTEGER", nullable: false),
-                    ToDoListId = table.Column<int>(type: "INTEGER", nullable: false)
+                    ToDoListId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ListItems", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ListItems_ToDoListIds_ToDoListId",
+                        name: "FK_ListItems_ToDoLists_ToDoListId",
                         column: x => x.ToDoListId,
-                        principalTable: "ToDoListIds",
+                        principalTable: "ToDoLists",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -52,7 +52,7 @@ namespace ToDoList.Migrations
                 name: "ListItems");
 
             migrationBuilder.DropTable(
-                name: "ToDoListIds");
+                name: "ToDoLists");
         }
     }
 }

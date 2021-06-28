@@ -1,5 +1,6 @@
 namespace ToDoList.Controllers
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -13,14 +14,12 @@ namespace ToDoList.Controllers
     public class ListItemController:Controller
     {
         private readonly IListItemRepository listItemRepository;
+        private readonly IToDoListRepository toDoListRepository;
 
-        public ListItemController(IListItemRepository listItemRepository)
+        public ListItemController(IListItemRepository listItemRepository, IToDoListRepository toDoListRepository)
         {
             this.listItemRepository =listItemRepository;
-        }
-
-        public ListItemController()
-        {
+            this.toDoListRepository = toDoListRepository;
         }
 
         // GET: ListItem/Get
@@ -29,6 +28,24 @@ namespace ToDoList.Controllers
         {         
             return this.listItemRepository.GetAll().ToArray();
         }
+
+        // GET: ListItem/GetList/{id}
+        [HttpGet("{id}")]
+        public IEnumerable<ListItem> GetList(int? id)
+        {
+           
+            if (id == null)
+            {
+                return null;
+            }
+            var listItem = listItemRepository.GetListById(id.Value);
+            if (listItem == null)
+            {
+                return null;
+            }
+            return listItem;
+        }
+
 
         // GET: ListItem/Details/{id}
         [HttpGet("{id}")]
@@ -47,20 +64,21 @@ namespace ToDoList.Controllers
             return Ok(toDoList);
         }
 
-        // POST: ListItem/Create/{toDoList}
+        
+        // POST: ListItem/Create/
         [HttpPost]        
         public async Task<IActionResult> Create(ListItem listItem)
         {
              if (ModelState.IsValid)
              {
-                await this.listItemRepository.CreateAsync(listItem);                
-                return Ok("Created");
+                await this.listItemRepository.CreateAsync(listItem);
+                return Ok();
              }
              
              return NotFound();
         }
 
-        // POST: ListItem/Edit/{toDoList}
+        // POST: ListItem/Edit/
         [HttpPost]        
         public async Task<IActionResult> Edit(ListItem listItem)
         {
@@ -78,21 +96,23 @@ namespace ToDoList.Controllers
                     }
                     else
                     {
-                        return Ok("Error");
+                        return Ok();
                     }
                 }
-                return Ok("Modified");
+                return Ok();
             }
 
             return NotFound();
         }
-        // POST: ListItem/Delete/{id}
-        [HttpPost]        
+        // GET: ListItem/Delete/{id}
+        [HttpGet("{id}")]        
         public async Task<IActionResult> Delete(int id)
         {
+            
             var listItem = await this.listItemRepository.GetByIdAsync(id);
+            
             await this.listItemRepository.DeleteAsync(listItem);
-            return Ok("Deleted");
+            return Ok();
         }
     }
     

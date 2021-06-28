@@ -11,7 +11,7 @@ namespace ToDoList.Data
             optionsBuilder.UseSqlite("Filename=todoList.db");
         }
 
-        public DbSet<ToDoList> ToDoListIds { get; set; } 
+        public DbSet<ToDoList> ToDoLists { get; set; } 
         public DbSet<ListItem> ListItems { get; set; } 
 
 

@@ -13,14 +13,10 @@ namespace ToDoList.Controllers
     public class ToDoListController:Controller
     {
         private readonly IToDoListRepository toDoListRepository;
-
-        public ToDoListController(IToDoListRepository toDoListRepository)
+        private readonly IListItemRepository listItemRepository;
+        public ToDoListController(IToDoListRepository toDoListRepository, IListItemRepository listItemRepository)
         {
-            this.toDoListRepository = toDoListRepository;
-        }
-
-        public ToDoListController()
-        {
+            this.toDoListRepository = toDoListRepository;            
         }
 
         // GET: ToDoList/Get
@@ -52,15 +48,15 @@ namespace ToDoList.Controllers
         public async Task<IActionResult> Create(ToDoList toDoList)
         {
              if (ModelState.IsValid)
-             {
+             { 
                 await this.toDoListRepository.CreateAsync(toDoList);                
-                return Ok("Created");
+                return Ok();
              }
              
              return NotFound();
         }
 
-        // POST: ToDoList/Edit/{toDoList}
+        // POST: ToDoList/Edit/
         [HttpPost]        
         public async Task<IActionResult> Edit(ToDoList toDoList)
         {
@@ -78,21 +74,24 @@ namespace ToDoList.Controllers
                     }
                     else
                     {
-                        return Ok("Error");
+                        return Ok();
                     }
                 }
-                return Ok("Modified");
+                return Ok();
             }
 
             return NotFound();
         }
-        // POST: ToDoList/Delete/{id}
-        [HttpPost]        
+        // GET: ToDoList/Delete/{id}
+        [HttpGet("{id}")]         
         public async Task<IActionResult> Delete(int id)
         {
             var toDoList = await this.toDoListRepository.GetByIdAsync(id);
+            
             await this.toDoListRepository.DeleteAsync(toDoList);
-            return Ok("Deleted");
+
+            
+            return Ok();
         }
     }
     
